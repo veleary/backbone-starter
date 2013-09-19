@@ -1,0 +1,70 @@
+<html>
+<head>
+  <title>To Do List</title>
+</head>
+<body>
+<label>Task Name</label>
+<input id="Task-Name"></input>
+<label>Task Description</label>
+<input id="Task-Description"></input>
+<input id="Add-Task" type="button" value= "Add Task"></button>
+
+<div id="Tasks"></div>
+
+<div id="templates">
+
+  <script class="Task" type="text/template">
+    <div class="Task">
+      <p><%=name%><%=description%></p>
+    </div>
+ </script>
+
+</div>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="/backbone.js" type="text/javascript"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
+
+<script type="text/javascript">
+
+var TaskTemplateHtml = $('#templates .Task').html();
+var TaskTemplate = _.template(TaskTemplateHtml);
+
+
+var TodoListView = Backbone.View.extend({
+  initialize: function(options){
+      this.tasks = options.tasks; 
+  },
+   addTask:function(new_taskname,new_description){
+      this.tasks.push({taskname: new_taskname, taskdescription: new_description})
+    },
+
+    render: function(){
+      $(this.el).empty();
+      for (var i=0; i<this.tasks.length; i+=1){
+        var newTaskHtml = TaskTemplate(new_task);
+        $(this.el).append(newTaskHtml);
+      }
+      return this;
+    }
+});
+
+var tasks = [];
+
+var View1 = new TodoListView({
+  tasks: [{taskname: "Laundry", taskdescription: "Wash/Dry"}],
+  el: $('#Add-Task')
+});
+
+
+$('#Add-Task').on('click', function (e) {	
+    var new_taskname = $('#Task-Name').val();
+    var new_taskdescription = $('#Task-Description').val();    
+    View1.addTask(new_taskname, new_taskdescription);
+    View1.render();    
+});
+
+</script>
+
+</body>
+</html>
